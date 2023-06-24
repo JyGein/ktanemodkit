@@ -1,3 +1,7 @@
+I just added some template stuff to make first time modding easier! glhf <3
+
+This is what the og readme said:
+
 Community fork of the KTaNE Modkit.
 
 The [original (official) modkit](https://github.com/keeptalkinggame/ktanemodkit) isn't going to receive updates anymore. This is the fork that will be maintained from now on.
