@@ -11,7 +11,7 @@ using Rnd = UnityEngine.Random;
 
 
      // this template here need to be the EXACT same thing as yo module type
-public class template : KtaneModule {
+public class template : MonoBehaviour {
      // might aswell name the script file the same thing
 
     // Modding Tutorial by Deaf: https://www.youtube.com/watch?v=YobuGSBl3i0
