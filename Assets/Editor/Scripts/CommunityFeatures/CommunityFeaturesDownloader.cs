@@ -12,7 +12,13 @@ public partial class CommunityFeaturesDownloader : EditorWindow
     {
         private void OnGUI()
         {
-            GUILayout.Label("To add your plugin to the list, contact Qkrisi#4982 on Discord.\nMake sure you have a build of your plugin ready alongside a proper documentation.");
+            GUILayout.Label("To add your plugin to the list, contact qkrisi on Discord.");
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("You can find him on the", GUILayout.ExpandWidth(false));
+            if(LinkButton("KTANE Discord server."))
+                Application.OpenURL("https://discord.gg/K6uQMyBcYZ");
+            GUILayout.EndHorizontal();
+            GUILayout.Label("Make sure you have a build of your plugin ready alongside a proper documentation.");
             GUILayout.Space(30);
             if (GUILayout.Button("OK"))
             {
@@ -23,7 +29,7 @@ public partial class CommunityFeaturesDownloader : EditorWindow
     }
     
     [MenuItem("Keep Talking ModKit/Plugins", false, priority = 950)]
-    private static void ShowWindow() 
+    private static void ShowWindow()
     {
         var window = GetWindow<CommunityFeaturesDownloader>();
         window.titleContent = new GUIContent("KMPlugins");
@@ -31,7 +37,7 @@ public partial class CommunityFeaturesDownloader : EditorWindow
         window.Show();
     }
 
-    public const string VERSION = "1.2.1.0";
+    public const string VERSION = "2.0.1.0";
     public readonly Version PARSED_VERSION = new Version(VERSION);
 
     private static readonly string[] Sizes = {"KB", "MB", "GB", "TB" };
@@ -76,7 +82,10 @@ public partial class CommunityFeaturesDownloader : EditorWindow
     private void CreateFeatureButton(FeatureInfo feature)
     {
         bool selected = CurrentFeature != null && feature.Name == CurrentFeature.Name;
-        if(GUILayout.Button(String.Format("{0} (By {1})", feature.Name, feature.Author), GUILayout.Width(FeatureButtonWidth)) && !selected)
+        GUI.enabled = !selected;
+        var selectPlugin = GUILayout.Button(String.Format("{0} (By {1})", feature.Name, feature.Author), GUILayout.Width(FeatureButtonWidth));
+        GUI.enabled = true;
+        if(selectPlugin && !selected)
         {
             CurrentFeature = feature;
             Repaint();
@@ -95,12 +104,14 @@ public partial class CommunityFeaturesDownloader : EditorWindow
             try
             {
                 DownloadedPlugins = JsonConvert.DeserializeObject<List<DownloadInfo>>(File.ReadAllText(InfoFilePath)) ?? new List<DownloadInfo>();
+                return;
             }
             catch (Exception ex)
             {
                 Debug.LogException(ex);
             }
         }
+        DownloadedPlugins = new List<DownloadInfo>();
     }
     
     private void Reset()
@@ -108,11 +119,11 @@ public partial class CommunityFeaturesDownloader : EditorWindow
         FeaturesFetch = null;
         Features = null;
         CurrentFeature = null;
-        DownloadedPlugins = new List<DownloadInfo>();
+        DownloadedPlugins = null;
         GithubReleaseHandler.ReleaseCache.Clear();
     }
 
-    private bool LinkButton(string text)
+    internal static bool LinkButton(string text)
     {
         return GUILayout.Button(String.Format("<color=blue>{0}</color>", text),
             new GUIStyle(GUI.skin.label) { richText = true });
@@ -189,7 +200,7 @@ public partial class CommunityFeaturesDownloader : EditorWindow
                 if (HelpWindow == null)
                 {
                     HelpWindow = GetWindow<HelpPopup>(true, "Adding plugins", true);
-                    HelpWindow.position = new Rect(Screen.width / 2 - 250, Screen.height / 2 - 50, 500, 100);
+                    HelpWindow.position = new Rect(Screen.width / 2 - 250, Screen.height / 2 - 52, 500, 105);
                     HelpWindow.Show();
                 }
                 else HelpWindow.Focus();
